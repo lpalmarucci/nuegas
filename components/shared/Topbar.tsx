@@ -16,7 +16,7 @@ export default function Topbar() {
   return (
     <div className="w-full h-16 fixed bg-white md:hidden top-0 left-0 z-20 px-4 py-6 flex justify-between items-center">
       <div
-        className={cn("absolute top-0 left-0 h-screen w-full bg-black/20 blur-md z-20 duration-0", {
+        className={cn("absolute top-0 left-0 h-screen w-full bg-black/20 blur-sm z-20 duration-0", {
           "-left-full": !isMenuOpen,
         })}
       ></div>
@@ -34,8 +34,8 @@ export default function Topbar() {
           },
         )}
       >
-        <div className="relative w-full h-full">
-          <div className="text-2xl text-gray-300 uppercase absolute top-4 right-4">
+        <div className="relative w-full h-full py-4 px-6">
+          <div className="text-2xl text-gray-300 uppercase flex justify-end">
             <Image
               src={"/assets/icons/close.svg"}
               alt={"Close"}
@@ -45,7 +45,7 @@ export default function Topbar() {
               onClick={() => setIsMenuOpen((prev) => false)}
             />
           </div>
-          <div className={cn("h-full w-full flex flex-col justify-center items-center px-8 gap-6")}>
+          <div className={cn("h-full w-full flex flex-col items-center px-8 gap-6 mt-4")}>
             <div>
               <Logo />
             </div>
@@ -55,12 +55,12 @@ export default function Topbar() {
                 return (
                   <Link
                     href={nav.route}
-                    alt={nav.label}
                     key={`nav-${idx}`}
                     className={cn(
-                      "flex w-full gap-3 px-6 py-3 items-center cursor-pointer rounded-lg transition-all hover:bg-gray-200 text-black",
+                      "flex w-full gap-3 px-6 py-3 items-center cursor-pointer rounded-lg transition-all text-black",
                       {
                         "bg-gray-200": isActive,
+                        "hover:bg-gray-100/70": !isActive
                       },
                     )}
                     onClick={(e) => {
