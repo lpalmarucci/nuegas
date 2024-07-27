@@ -7,6 +7,7 @@ import { navMenuLinks } from "@/costants";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "@/components/shared/Logo";
+import { SignedIn, SignOutButton } from "@clerk/nextjs";
 
 export default function Topbar() {
   const router = useRouter();
@@ -60,7 +61,7 @@ export default function Topbar() {
                       "flex w-full gap-3 px-6 py-3 items-center cursor-pointer rounded-lg transition-all text-black",
                       {
                         "bg-gray-200": isActive,
-                        "hover:bg-gray-100/70": !isActive
+                        "hover:bg-gray-100/70": !isActive,
                       },
                     )}
                     onClick={(e) => {
@@ -79,6 +80,14 @@ export default function Topbar() {
                   </Link>
                 );
               })}
+              <SignedIn>
+                <SignOutButton>
+                  <div className="flex gap-3 items-center cursor-pointer hover:shadow-xl px-6 py-3 rounded-lg transition-shadow hover:shadow-red-400/20 bg-red-500">
+                    <Image src="/assets/icons/exit.svg" className="fill-gray-300" alt="logout" width={24} height={24} />
+                    <span className="text-base text-white font-medium">Logout</span>
+                  </div>
+                </SignOutButton>
+              </SignedIn>
             </div>
           </div>
         </div>
