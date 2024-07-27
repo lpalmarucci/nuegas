@@ -2,10 +2,6 @@ import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
 
-interface HeroHeaderProps {
-  title: string;
-}
-
 export default async function HeroHeader() {
   const userInfo = await currentUser();
 

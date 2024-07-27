@@ -5,12 +5,11 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { navMenuLinks } from "@/costants";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Logo from "@/components/shared/Logo";
 import { SignedIn, SignOutButton } from "@clerk/nextjs";
 
 export default function Topbar() {
-  const router = useRouter();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -64,9 +63,8 @@ export default function Topbar() {
                         "hover:bg-gray-100/70": !isActive,
                       },
                     )}
-                    onClick={(e) => {
-                      // router.push(nav.route);
-                      setIsMenuOpen((prev) => false);
+                    onClick={() => {
+                      setIsMenuOpen(() => false);
                     }}
                   >
                     <Image
