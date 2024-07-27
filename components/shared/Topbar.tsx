@@ -15,7 +15,7 @@ export default function Topbar() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
-    <div className="w-full h-16 fixed bg-white md:hidden top-0 left-0 z-20 px-4 py-6 flex justify-between items-center">
+    <div className="w-full h-16 sticky bg-white md:hidden top-0 left-0 z-20 px-4 py-6 flex justify-between items-center">
       <div
         className={cn("absolute top-0 left-0 h-screen w-full bg-black/20 blur-sm z-20 duration-0", {
           "-left-full": !isMenuOpen,

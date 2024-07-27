@@ -67,3 +67,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.container{
+  @apply px-4 py-6 md:px-8 md:py-10;
+}
