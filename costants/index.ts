@@ -6,7 +6,7 @@ export const navMenuLinks = [
   },
   {
     imgURL: "/assets/icons/book.svg",
-    route: "/task",
+    route: "/tasks",
     label: "Task",
   },
   {

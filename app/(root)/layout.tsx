@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang="en">
         <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>
           <Topbar />
-          <main className="flex bg-gray-100">
+          <main className="flex">
             <LeftSidebar />
             {children}
           </main>
