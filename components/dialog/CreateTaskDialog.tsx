@@ -37,6 +37,7 @@ function CreateTaskDialog() {
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
   return (
     <Dialog defaultOpen>
       <DialogTrigger asChild>
@@ -72,7 +73,7 @@ function CreateTaskDialog() {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea rows={3} placeholder="Type the details of the task" {...field} />
+                      <Textarea className="max-h-36 h-full" placeholder="Type the details of the task" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

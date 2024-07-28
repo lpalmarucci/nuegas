@@ -6,7 +6,6 @@ const taskSchema = z.object({
   duration: z.coerce.number().min(0).max(99),
   dueDate: z.date().optional(),
   startDate: z.date().optional(),
-  assignedTo: z.string(),
 });
 
 export default taskSchema;
