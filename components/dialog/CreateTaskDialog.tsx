@@ -11,13 +11,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import taskSchema from "@/lib/validations/task";
+import taskFormSchema from "@/lib/validations/task";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { DialogBody } from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
 import { Textarea } from "@/components/ui/textarea";
 import * as React from "react";
+import { useTransition } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -25,20 +26,32 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import SubmitButton from "@/components/shared/SubmitButton";
-import { createTask } from "@/lib/actions/task";
+import { createTask } from "@/lib/actions/task.actions";
 
 function CreateTaskDialog() {
-  const form = useForm<z.infer<typeof taskSchema>>({
-    resolver: zodResolver(taskSchema),
+  const [isPending, startTransition] = useTransition();
+  const form = useForm<z.infer<typeof taskFormSchema>>({
+    resolver: zodResolver(taskFormSchema),
     mode: "onSubmit",
     defaultValues: {
       title: "",
       description: "",
-      startDate: new Date(),
-      dueDate: new Date(),
+      startDate: "",
+      dueDate: "",
       duration: 0,
     },
   });
+
+  async function onSubmit(values: z.infer<typeof taskFormSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
+    startTransition(async () => {
+      await createTask(values);
+    });
+  }
+
+  console.log({ isPending });
 
   return (
     <Dialog
@@ -58,7 +71,7 @@ function CreateTaskDialog() {
         </DialogHeader>
         <DialogBody>
           <Form {...form}>
-            <form action={createTask} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
                 name="title"
@@ -85,20 +98,20 @@ function CreateTaskDialog() {
                   </FormItem>
                 )}
               />
-              <div className="flex gap-4 items-center">
+              <div className="w-full flex flex-col md:flex-row gap-4 items-center">
                 <FormField
                   control={form.control}
                   name="startDate"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1">
+                    <FormItem className="w-full flex flex-col gap-1">
                       <FormLabel>Start Date</FormLabel>
                       <FormControl>
-                        <Popover>
+                        <Popover modal={true}>
                           <PopoverTrigger asChild>
                             <Button
                               variant="outline"
                               className={cn(
-                                "w-[280px] justify-start text-left font-normal",
+                                "w-full md:w-[280px] justify-start text-left font-normal",
                                 !field.value && "text-muted-foreground",
                               )}
                             >
@@ -106,7 +119,7 @@ function CreateTaskDialog() {
                               {field.value ? format(field.value, "P", { locale: it }) : <span>Pick a date</span>}
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
+                          <PopoverContent className="w-auto p-0" side="top">
                             <Calendar
                               {...field}
                               mode="single"
@@ -126,7 +139,7 @@ function CreateTaskDialog() {
                   control={form.control}
                   name="dueDate"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1">
+                    <FormItem className="w-full flex flex-col gap-1">
                       <FormLabel>Due Date</FormLabel>
                       <FormControl>
                         <Popover>
@@ -134,7 +147,7 @@ function CreateTaskDialog() {
                             <Button
                               variant="outline"
                               className={cn(
-                                "w-[280px] justify-start text-left font-normal",
+                                "w-full md:w-[280px] justify-start text-left font-normal",
                                 !field.value && "text-muted-foreground",
                               )}
                             >
@@ -162,7 +175,7 @@ function CreateTaskDialog() {
                   control={form.control}
                   name="duration"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1">
+                    <FormItem className="w-full flex flex-col gap-1">
                       <FormLabel>Hours (est)</FormLabel>
                       <FormControl>
                         <Input placeholder={"0"} min={0} max={99} type="number" {...field} />
