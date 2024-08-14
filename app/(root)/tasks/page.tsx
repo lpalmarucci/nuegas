@@ -3,6 +3,8 @@ import Search from "@/components/ui/search";
 import CreateTaskDialog from "@/components/dialog/CreateTaskDialog";
 
 export default async function TasksPage() {
+  // const tasks = await getTasks();
+
   return (
     <div className="w-full flex flex-col gap-10">
       <div className="flex flex-col justify-center gap-10 container">

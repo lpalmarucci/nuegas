@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { DialogBody } from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
 import { Textarea } from "@/components/ui/textarea";
 import * as React from "react";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -27,8 +27,10 @@ import { it } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import SubmitButton from "@/components/shared/SubmitButton";
 import { createTask } from "@/lib/actions/task.actions";
+import { toast } from "@/components/ui/use-toast";
 
 function CreateTaskDialog() {
+  const [open, setOpen] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof taskFormSchema>>({
     resolver: zodResolver(taskFormSchema),
@@ -47,7 +49,20 @@ function CreateTaskDialog() {
     // ✅ This will be type-safe and validated.
     console.log(values);
     startTransition(async () => {
-      await createTask(values);
+      const msg = await createTask(values);
+      if (msg) {
+        toast({
+          variant: "destructive",
+          title: "Error while creating task",
+          description: msg,
+        });
+      } else {
+        toast({
+          variant: "default",
+          title: "Task created successfully!",
+        });
+        setOpen(false);
+      }
     });
   }
 
@@ -55,8 +70,10 @@ function CreateTaskDialog() {
 
   return (
     <Dialog
+      open={open}
       onOpenChange={(isOpen) => {
         if (!isOpen) form.reset();
+        setOpen(isOpen);
       }}
     >
       <DialogTrigger asChild>
@@ -98,7 +115,7 @@ function CreateTaskDialog() {
                   </FormItem>
                 )}
               />
-              <div className="w-full flex flex-col md:flex-row gap-4 items-center">
+              <div className="w-full flex flex-col md:flex-row gap-4">
                 <FormField
                   control={form.control}
                   name="startDate"
@@ -185,7 +202,9 @@ function CreateTaskDialog() {
                   )}
                 />
               </div>
-              <SubmitButton disabled={!form.formState.isValid}>Create</SubmitButton>
+              <SubmitButton loading={Boolean(isPending)} disabled={!form.formState.isValid}>
+                Create
+              </SubmitButton>
             </form>
           </Form>
         </DialogBody>

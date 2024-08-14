@@ -1,13 +1,13 @@
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { useFormStatus } from "react-dom";
 import { cn } from "@/lib/utils";
 
-function SubmitButton(props: ButtonProps) {
-  const { pending } = useFormStatus();
+type SubmitButtonProps = ButtonProps & { loading: boolean };
+
+function SubmitButton({ loading, ...props }: SubmitButtonProps) {
   return (
     <Button {...props} type="submit" className={cn("select-none", props.className)}>
-      {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
       {props.children}
     </Button>
   );

@@ -5,6 +5,7 @@ import LeftSidebar from "@/components/shared/LeftSidebar";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import "../globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata = {
   title: "Nuegas",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <LeftSidebar />
             {children}
           </main>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
