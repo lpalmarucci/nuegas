@@ -1,12 +1,15 @@
 import HeroHeader from "@/components/layout/HeroHeader";
 import Search from "@/components/ui/search";
 import CreateTaskDialog from "@/components/dialog/CreateTaskDialog";
+import { getScheduledTasks, getUnscheduledTasks } from "@/lib/actions/task.actions";
+import TaskCarousel from "@/components/layout/TaskCarousel";
 
 export default async function TasksPage() {
-  // const tasks = await getTasks();
+  const scheduledTasks = await getScheduledTasks();
+  const unscheduledTasks = await getUnscheduledTasks();
 
   return (
-    <div className="w-full flex flex-col gap-10">
+    <div className="overflow-hidden w-full flex flex-col">
       <div className="flex flex-col justify-center gap-10 container">
         <HeroHeader title="Explore tasks" />
         <div className="flex justify-between items-center">
@@ -14,12 +17,10 @@ export default async function TasksPage() {
           <CreateTaskDialog />
         </div>
       </div>
-      <div className="bg-gray-300 h-full w-full">
-        <div className="container">
-          <h1 className="font-bold text-xl">Created recently</h1>
-        </div>
+      <div className="bg-gray-200 h-full w-full grid grid-rows-2">
+        <TaskCarousel tasks={scheduledTasks} title="Near expiration" />
+        <TaskCarousel tasks={unscheduledTasks} title="To be defined" />
       </div>
-      {/*<Image src={"/assets/icons/notiification.svg"} alt={"test"} height={20} width={20} />*/}
     </div>
   );
 }

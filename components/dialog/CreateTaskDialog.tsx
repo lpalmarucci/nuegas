@@ -38,16 +38,13 @@ function CreateTaskDialog() {
     defaultValues: {
       title: "",
       description: "",
-      startDate: "",
-      dueDate: "",
+      startDate: undefined,
+      dueDate: undefined,
       duration: 0,
     },
   });
 
   async function onSubmit(values: z.infer<typeof taskFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
     startTransition(async () => {
       const msg = await createTask(values);
       if (msg) {
@@ -58,24 +55,17 @@ function CreateTaskDialog() {
         });
       } else {
         toast({
-          variant: "default",
+          variant: "success",
           title: "Task created successfully!",
         });
+        form.reset();
         setOpen(false);
       }
     });
   }
 
-  console.log({ isPending });
-
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) form.reset();
-        setOpen(isOpen);
-      }}
-    >
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Crea nuovo</Button>
       </DialogTrigger>
@@ -139,6 +129,11 @@ function CreateTaskDialog() {
                           <PopoverContent className="w-auto p-0" side="top">
                             <Calendar
                               {...field}
+                              disabled={(date) => {
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0);
+                                return date < today;
+                              }}
                               mode="single"
                               selected={field.value}
                               onDayClick={field.onChange}
@@ -148,7 +143,7 @@ function CreateTaskDialog() {
                         </Popover>
                       </FormControl>
                       <FormMessage />
-                      <input type="hidden" name={field.name} value={field.value} />
+                      <input type="hidden" name={field.name} value={field.value?.toString()} />
                     </FormItem>
                   )}
                 />
@@ -175,6 +170,7 @@ function CreateTaskDialog() {
                           <PopoverContent className="w-auto p-0">
                             <Calendar
                               mode="single"
+                              disabled={(date) => date < new Date()}
                               selected={field.value}
                               onDayClick={field.onChange}
                               initialFocus
@@ -184,7 +180,7 @@ function CreateTaskDialog() {
                         </Popover>
                       </FormControl>
                       <FormMessage />
-                      <input type="hidden" name={field.name} value={field.value} />
+                      <input type="hidden" name={field.name} value={field.value?.toString()} />
                     </FormItem>
                   )}
                 />
